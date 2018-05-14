@@ -28,9 +28,9 @@ void on_message(server* s, websocketpp::connection_hdl hdl, message_ptr msg) {
 
     try {
         s->send(hdl, msg->get_payload(), msg->get_opcode());
-    } catch (const websocketpp::lib::error_code& e) {
-        std::cout << "Echo failed because: " << e
-                  << "(" << e.message() << ")" << std::endl;
+    } catch (websocketpp::exception const & e) {
+        std::cout << "Echo failed because: "
+                  << "(" << e.what() << ")" << std::endl;
     }
 }
 
@@ -43,7 +43,7 @@ int main() {
         echo_server.set_access_channels(websocketpp::log::alevel::all);
         echo_server.clear_access_channels(websocketpp::log::alevel::frame_payload);
 
-        // Initialize ASIO
+        // Initialize Asio
         echo_server.init_asio();
 
         // Register our message handler
